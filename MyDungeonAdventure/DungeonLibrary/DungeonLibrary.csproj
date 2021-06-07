@@ -52,6 +52,7 @@
     <Compile Include="Skeleton.cs" />
     <Compile Include="Spell.cs" />
     <Compile Include="Weapon.cs" />
+    <Compile Include="Witch.cs" />
     <Compile Include="Zombie.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

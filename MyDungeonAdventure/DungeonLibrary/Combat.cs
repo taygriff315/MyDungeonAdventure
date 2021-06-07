@@ -41,7 +41,7 @@ namespace DungeonLibrary
         public static void DoMagicAttack(Hero hero, Monster monster)
         {
             System.Threading.Thread.Sleep(1500);
-            if (hero.Mana >0)
+            if (hero.Mana >=10)
             {
                 monster.Life -= 30;
                 hero.Mana -= 10;
@@ -69,11 +69,7 @@ namespace DungeonLibrary
                 Console.WriteLine("Shaq has restored 30 HP");
                 Console.WriteLine($"His current HP is now {hero.Life}");
             }
-            else
-            {
-                Console.WriteLine("You don't have any Health potions");
-            }
-
+   
 
 
         }

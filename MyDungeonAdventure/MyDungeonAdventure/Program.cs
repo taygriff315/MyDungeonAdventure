@@ -19,7 +19,7 @@ namespace MyDungeonAdventure
             Weapon sword = new Weapon(15, 25, "Scimitar", false, 10);
             Spell fire = new Spell(25, 30, 10, "Fire" );
 
-            Hero hero = new Hero("Shaquille O'Neal", Race.Giant, sword, fire, 100, 100, 25, 10, 75, 30, 3, 3, "The Man of Steele");
+            Hero hero = new Hero("Shaquille O'Neal", Race.Giant, sword, fire, 150, 150, 25, 10, 75, 30, 5, 5, "The Man of Steele");
             #region Title Screen
             System.Threading.Thread.Sleep(50);
             Console.WriteLine();
@@ -44,14 +44,34 @@ namespace MyDungeonAdventure
             Console.ResetColor();
             Console.ReadLine();
             Console.Clear();
+           
+            Console.WriteLine("An evil witch has cast a spell on Shaquille O'Neil");
+            System.Threading.Thread.Sleep(3000);
+            Console.Clear();
+            
+            Console.WriteLine("Stripping him of all of his NBA Championship rings, she has sent him to a nightmare fighting against his most haunting fears.");
+            System.Threading.Thread.Sleep(5000);
+            Console.Clear();
+            Console.WriteLine("Collect all of your rings and then defeat the evil witch to save your legacy and remain one of the games all time greats.");
+            System.Threading.Thread.Sleep(5000);
+            Console.Clear();
             #endregion
             do
             {
                 Console.WriteLine();
-                Console.WriteLine(GetRoom());
+                if (score == 4)
+                {
+                    Console.WriteLine("Nothing but darkness, followed by the hideous laughter of a wretched winch..");
+                }
+                else
+                {
+
+
+                    Console.WriteLine(GetRoom());
+                }
                 #region Monsters
 
-                Zombie general = new Zombie("Zombie General", 50, 50, 10, 75, 10, 3, 20, "Go to the General and save some time!", @"
+                Zombie general = new Zombie("Zombie Aaron Carter", 50, 50, 10, 75, 10, 3, 20, "One time I beat Shaq in one-on-one.", @"
                                                                    /|x x|
                                                                   /\( - )
                                                           ___.-._/\/
@@ -107,27 +127,49 @@ namespace MyDungeonAdventure
                                                            ==' '==");
 
                 #endregion
+            
                 Monster[] monsters = { general, barkley, jordan };
                 Random rand = new Random();
                 int randomNbr = rand.Next(monsters.Length);
                 Monster monster = monsters[randomNbr];
 
-                Console.WriteLine("\n                              In this room: "+monster.Name);
+                if (score ==4)
+                {
+                    Console.WriteLine("You've collected all the NBA Championship rings!!");
+                    System.Threading.Thread.Sleep(2000);
+                    Console.WriteLine("Now it's time to fight the witch and end all of this for good.");
+                    System.Threading.Thread.Sleep(2500);
+
+                    Spell darkMagic = new Spell(35, 35, 10, "Dark Magic");
+                    monster = new Witch("Evil Witch", 100, 100, 20, 75, 10, 10, 20, "The evil witch that has stolen Shaqs legacy. She has a powerful magic attack. Be careful!", @"
+                                                   /,
+                                                  / \
+                                              ___/___\__\ V /
+                                                &(6_d)%   Y
+                                                 /___\____|
+                                                /) : (    |
+                                                /     \   |
+                                               '--V-V--'  |", darkMagic);
+                    
+                }
+
+                Console.WriteLine("\n                              In this room: " + monster.Name);
 
 
 
                 bool reload = false;
                 do
                 {
+                    #region Game Menu
                     Console.WriteLine(monster.Image);
 
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.Write("\n               HP <3 : {0}", hero.Life);
+                    Console.Write("\n             HP <3 : {0} ", hero.Life);
                     Console.ResetColor();
                     Console.ForegroundColor = ConsoleColor.DarkBlue;
                     Console.Write($"      Mana: {hero.Mana}");
                     Console.ResetColor();
-                    Console.Write($"         :Please choose an action:     ");
+                    Console.Write($"       :Please choose an action:     ");
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.Write("Potions: ");
                     Console.ResetColor();
@@ -140,25 +182,27 @@ namespace MyDungeonAdventure
                     Console.ResetColor();
                     Console.Write($"[{hero.ManaPotions}]");
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.Write($"     Rings: {score}\n\n");
+                    Console.Write($"     Rings: {score} / 4\n\n");
                     Console.ResetColor();
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Console.WriteLine("                           A) Attack   F) Fireball    R) Run Away   J) Health Potion   K) Mana Potion\n");   
-                    Console.WriteLine("\n                                         P) Player Info    M) Monster Info   X) Exit");
+                    Console.WriteLine("                           A) Attack   F) Fireball    R) Run Away   H) Health Potion   M) Mana Potion\n");
+                    Console.WriteLine("\n                                        P) Player Info    I) Monster Info   X) Exit");
                     Console.ResetColor();
+                    #endregion
+
                     ConsoleKey userChoice = Console.ReadKey(true).Key;
                     Console.Clear();
-                    
+
                     switch (userChoice)
                     {
                         case ConsoleKey.A:
                             Console.WriteLine("Attack");
 
                             Combat.DoBattle(hero, monster);
-                            if (monster.Life <=0)
+                            if (monster.Life <= 0)
                             {
                                 Console.ForegroundColor = ConsoleColor.Green;
-                                Console.WriteLine("\n You have killed {0}!\n",monster.Name);
+                                Console.WriteLine("\n You have killed {0}!\n", monster.Name);
                                 Console.ResetColor();
 
                                 reload = true;
@@ -174,31 +218,60 @@ namespace MyDungeonAdventure
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine("\n You have killed {0}!\n", monster.Name);
                                 Console.ResetColor();
-
+                                
                                 reload = true;
                                 score++;
                             }
                             break;
 
-                        case ConsoleKey.J:
-                            Combat.UseHealthPotion(hero);
-                            Combat.DoAttack(monster, hero);
+                        case ConsoleKey.H:
+                            if (hero.HealthPotions != 0)
+                            {
+
+                                Combat.UseHealthPotion(hero);
+                                Combat.DoAttack(monster, hero);
+                            }
+                            else
+                            {
+                                System.Threading.Thread.Sleep(1500);
+                                Console.WriteLine("You don't have any Health potions");
+                            }
+
                             break;
-                        case ConsoleKey.K:
-                            Combat.UseManaPotion(hero);
-                            Combat.DoAttack(monster, hero);
+
+
+                        case ConsoleKey.M:
+                            if (hero.ManaPotions != 0)
+                            {
+
+                                Combat.UseManaPotion(hero);
+                                Combat.DoAttack(monster, hero);
+                            }
+                            else
+                            {
+                                System.Threading.Thread.Sleep(1500);
+                                Console.WriteLine("You don't have any Mana potions");
+                            }
                             break;
                         case ConsoleKey.R:
-                            Console.WriteLine("Run Away");
-                            exit = false;
-                            reload = true;
-                            Combat.DoAttack(monster, hero);
-                            Console.WriteLine();
+                            if (score >= 4)
+                            {
+                                Console.WriteLine("You can't run away from the boss fight!!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Run Away");
+                                exit = false;
+                                reload = true;
+                                Combat.DoAttack(monster, hero);
+                                Console.WriteLine();
+                            }
+                         
                             break;
                         case ConsoleKey.P:
                             Console.WriteLine(hero);
                             break;
-                        case ConsoleKey.M:
+                        case ConsoleKey.I:
                             Console.WriteLine(monster);
                             break;
                         case ConsoleKey.X:
@@ -217,10 +290,43 @@ namespace MyDungeonAdventure
                         exit = true;
                     }
 
+                    if (score >=5)
+                    {
+                        exit = true;
+                    }
 
                 } while (!exit && !reload);
 
+
+
+
+              
+
+
+
+
             } while (!exit);
+
+            if (score >= 5)
+            {
+
+                Console.WriteLine("Congrats!! You did it!!");
+                System.Threading.Thread.Sleep(2000);
+                Console.WriteLine("You defeated the witch and saved the legacy of Shaquille O'Neil!!");
+                System.Threading.Thread.Sleep(2500);
+             
+            }
+            else
+            {
+                Console.WriteLine("GAME OVER.. You lose");
+   
+            }
+
+            Console.WriteLine("Thanks for playing!!");
+            System.Threading.Thread.Sleep(2000);
+            Console.WriteLine("Designed by: Taylor Griffin");
+
+
         }
 
         #region Rooms
@@ -236,7 +342,6 @@ namespace MyDungeonAdventure
                    floor with skeleton bones inside of them.",
 
             };
-            #endregion
 
 
 
@@ -248,6 +353,9 @@ namespace MyDungeonAdventure
             return room;
 
         }
+            #endregion
+
+
     }
 }
 
